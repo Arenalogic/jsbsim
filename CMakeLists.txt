@@ -135,6 +135,12 @@ if (PkgConfig_FOUND)
   if (NOT BUILD_SHARED_LIBS)
     get_target_property(libJSBSim_LINK_LIBRARIES libJSBSim LINK_LIBRARIES)
     foreach(_LIB ${libJSBSim_LINK_LIBRARIES})
+
+      # Ignore build-only entries ($<BUILD_INTERFACE:...> i.e. the object libraries)
+      if (_LIB MATCHES "^\\$<BUILD_INTERFACE")
+        continue()
+      endif()
+
       set(JSBSIM_PKG_CONFIG_LINK_LIBRARIES "${JSBSIM_PKG_CONFIG_LINK_LIBRARIES} -l${_LIB}")
     endforeach(_LIB)
   endif(NOT BUILD_SHARED_LIBS)

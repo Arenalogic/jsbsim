@@ -208,7 +208,12 @@ public:
   void Message(const std::string& message) override { buffer.append(message); }
   void Format(LogFormat format) override;
   void Flush(void) override;
-  ~FGLogConsole() override { Flush(); }
+  // Does not flush. The default logger is thread_local (GlobalLogger) and is
+  // destroyed at thread exit or library unload, when std::cout and std::cerr
+  // may already point into a stream buffer that no longer exists (a host that
+  // redirected them and has since been unloaded). A record still pending at
+  // that point is dropped rather than written into freed memory.
+  ~FGLogConsole() override = default;
 
 protected:
   std::string buffer;

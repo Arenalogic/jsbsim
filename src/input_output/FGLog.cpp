@@ -179,6 +179,9 @@ FGXMLLogging::FGXMLLogging(Element* el, LogLevel level)
 //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 void FGLogConsole::Flush(void) {
+  // Nothing to write: leave the standard streams alone.
+  if (buffer.empty()) return;
+
   if (log_level >= min_level || log_level == LogLevel::STDOUT) {
     switch (log_level)
     {
